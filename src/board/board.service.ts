@@ -15,8 +15,8 @@ export class BoardService {
         const { title,description } = createBoardDto;
         const board:Board = {
             id: uuid(),
-            title,
-            description: description, // 동일하면 스킵가능
+            title, // 이름이 동일하면 스킵가능
+            description: description, 
             status: BoardStatus.PUBLIC,
         }
 
@@ -24,4 +24,23 @@ export class BoardService {
         return board;
     }
 
+    getBoardById(id: string) : Board | undefined {
+        return this.boards.find((borad) => borad.id === id);
+    }
+
+    deleteBoard(id: string) : void {
+        this.boards = this.boards.filter((board) => board.id !== id);
+    }
+    
+    updateBoardStatus(id: string, status: BoardStatus) : Board {
+        const board = this.getBoardById(id);
+
+        if (!board) {
+            throw new Error(`Board with id ${id} not found`);
+        }
+        
+        board.status = status;
+
+        return board;
+    }
 }
